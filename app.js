@@ -22,7 +22,8 @@ function update() {
         let p_content = "";
         e = e.replaceAll(" ", "&nbsp;");
         if (e.length > 0) {
-          p_content = mark_it(get_pos(e), e);
+          p_content = e.replace(/(\|\|.+?\|\|)/g, '<span class="hidden_preview">$1</span>');
+          p_content = p_content.replace(/(`.+?`)/g, '<span class="istak">$1</span>');
         } else {
           p_content = "&nbsp;";
         }
@@ -37,54 +38,7 @@ function update() {
   requestAnimationFrame(update);
 }
 
-const get_pos = (content) => {
-  let chars = content.split("");
-  let datas = [];
-  let found = false;
-  let pos = {};
-  for (let c = 0; c < chars.length; c++) {
-    let v = chars[c];
-    if (v == "|") {
-      if (chars[c + 1] == "|") {
-        if (found) {
-          pos["e"] = c + 1 + 1;
-          datas.push(pos);
-          pos = {};
-          found = false;
-        } else {
-          found = true;
-          pos["s"] = c;
-        }
-      }
-    }
-  }
-
-  return datas;
-};
-
-const mark_it = (objs, content) => {
-  let chars = content.split("");
-  let y = [];
-  for (let i = 0; i < objs.length; i++) {
-    let d = objs[i];
-    let dlta = chars.length - content.length;
-    let cs = d.s + dlta;
-    chars = insert(chars, cs, `<span class='hidden_preview'>`);
-    dlta = chars.length - content.length;
-    let ce = d.e + dlta;
-    chars = insert(chars, ce, `</span>`);
-    // console.log(chars)
-  }
-
-  return chars.join("");
-};
-
-// it insert before `i` index
-const insert = (x, i, v) => {
-  let y = x.slice(0, i);
-  y.push(v, ...x.slice(i));
-  return y;
-};
-
 // Updating the preview screen
 update();
+
+
