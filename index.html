@@ -49,7 +49,7 @@
       hello <span class="hidden_preview">|| hidd|en ||</span> and | not hidden |
     </div>
     <div id="f" class="t">
-
+hello <span class="hidden_preview">|| hidd|en ||</span> and | not hidden |
     </div>
     </section>
     <!-- <div contenteditable="true" spellcheck="false">Hello World!</div> -->
@@ -57,10 +57,16 @@
     <script>
       const input_div = document.querySelector("div");
     //   let datas = new Set();
+    input_div.addEventListener("keypress", (e) => {
+      if (e.key == "Enter") {
+          input_div.blur();
+        }
+    })
       input_div.addEventListener("keyup", (e) => {
-    //     if (e.key == "Enter") {
-    //       input_div.blur();
-    //     } else {
+        if (e.key == "Enter") {
+          input_div.blur();
+        }
+    // else {
     //       const content = input_div.textContent;
     //       let chars = content.split("");
     //       // first bar occupied
