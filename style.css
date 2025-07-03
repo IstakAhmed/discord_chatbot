@@ -1,0 +1,48 @@
+* {
+  box-sizing: border-box;
+  font-family: "JetBrains Mono", monospace;
+}
+
+.editor_wrapper {
+  /* background-color: yellow; */
+
+  position: relative;
+}
+
+.preview > p {
+  margin: 0;
+  padding: 0;
+  word-wrap: break-word;
+}
+
+.preview > p:empty {
+  background-color: royalblue;
+}
+
+.editor,
+.preview {
+  height: 300px;
+  width: 100%;
+  font-size: 18px;
+  padding: 0.5rem;
+}
+
+.editor {
+  
+  color: transparent;
+  background-color: transparent;
+  caret-color: red;
+}
+
+.preview {
+  position: absolute;
+  top: 0;
+  background-color: lightblue;
+  z-index: -1;
+  color: red;
+  overflow-y: scroll;
+}
+
+.hidden_preview {
+  background-color: orange;
+}

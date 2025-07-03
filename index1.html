@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+       <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap"
+      rel="stylesheet"
+    />
+
+  </head>
+  <style>
+    div {
+      background-color: yellow;
+      padding: 0.5rem;
+      font-size: 1.5rem;
+      font-family: "JetBrains Mono", monospace;
+      font-family: "Courier New", Courier, monospace;
+    }
+
+    div:has(div) > div {
+      margin: 0;
+      padding: 0;
+    }
+
+    .hidden_preview {
+      background-color: orange;
+    }
+
+    section {
+        position: relative;
+    }
+
+
+    .t {
+        position: absolute;
+    }
+
+    #r {
+        background-color: transparent;
+    }
+
+    #f {
+        z-index: -1;
+        color: transparent;
+        
+    }
+
+  </style>
+  <body>
+
+    <section>
+    <div id="r" class="t" contenteditable="true" spellcheck="false" >
+      hello <span class="hidden_preview">|| hidd|en ||</span> and | not hidden |
+    </div>
+    <div id="f" class="t">
+hello <span class="hidden_preview">|| hidd|en ||</span> and | not hidden |
+    </div>
+    </section>
+    <!-- <div contenteditable="true" spellcheck="false">Hello World!</div> -->
+
+    <script>
+      const input_div = document.querySelector("div");
+    //   let datas = new Set();
+    input_div.addEventListener("keypress", (e) => {
+      if (e.key == "Enter") {
+          input_div.blur();
+        }
+    })
+      input_div.addEventListener("keyup", (e) => {
+        if (e.key == "Enter") {
+          input_div.blur();
+        }
+    // else {
+    //       const content = input_div.textContent;
+    //       let chars = content.split("");
+    //       // first bar occupied
+    //       let found = false;
+    //       let pos = {};
+    //       for (let c = 0; c < chars.length; c++) {
+    //         let v = chars[c];
+    //         console.log({ c, v });
+
+    //         if (v == "|") {
+    //           if (chars[c + 1] == "|") {
+    //             if (found) {
+    //               pos["e"] = c + 1 + 1;
+    //               let s = `${pos["s"]}#${pos["e"]}`;
+    //               console.log({ pos, s });
+    //               datas.add(s);
+    //               pos = {};
+    //               found = false;
+    //             } else {
+    //               found = true;
+    //               pos["s"] = c;
+    //             }
+    //           }
+    //         }
+    //       }
+    //     }
+
+        // mark_it(datas);
+
+
+
+let f = mark_it(get_pos(input_div.textContent));
+
+        console.log(f);
+        document.querySelector('#f').innerHTML = f;
+      });
+
+
+      const get_pos = (content) => {
+          let chars = content.split("");
+          let datas = [];
+          // first bar occupied
+          let found = false;
+          let pos = {};
+          for (let c = 0; c < chars.length; c++) {
+            let v = chars[c];
+            // console.log({ c, v });
+
+            if (v == "|") {
+              if (chars[c + 1] == "|") {
+                if (found) {
+                  pos["e"] = c + 1 + 1;
+                //   let s = `${pos["s"]}#${pos["e"]}`;
+
+                // data -> pos
+
+                //   console.log({ pos, s });
+                //   datas.add(s);
+                datas.push(pos);
+                  pos = {};
+                  found = false;
+                } else {
+                  found = true;
+                  pos["s"] = c;
+                }
+              }
+            }
+          }
+
+          return datas;
+      }
+
+
+      const mark_it = (objs) => {
+        // let objs = [];
+
+        // maps.forEach((e) => {
+        //   let y = e.split("#").map((v) => Number(v));
+        //   let f = { s: y[0], e: y[1] };
+        //   objs.push(f);
+        // });
+
+        const content = input_div.textContent;
+        let chars = content.split("");
+        let y = [];
+        for (let i = 0; i < objs.length; i++) {
+          let d = objs[i];
+          let dlta = chars.length - content.length;
+          let cs = d.s + dlta;
+          // console.log(`contL: ${content.length} chrL: ${chars.length} s: ${cs} delta: ${dlta}`)
+          chars = insert(chars, cs, `<span class='hidden_preview'>`);
+          // console.log(chars)
+          dlta = chars.length - content.length;
+          let ce = d.e + dlta;
+          // console.log(`contL: ${content.length} chrL: ${chars.length} e: ${ce} delta: ${dlta}`)
+          chars = insert(chars, ce, `</span>`);
+          // console.log(chars)
+        }
+
+        return chars.join('')
+      };
+
+      // it insert before `i` index
+
+      const insert = (x, i, v) => {
+        let y = x.slice(0, i);
+        y.push(v, ...x.slice(i));
+        return y;
+      };
+    </script>
+  </body>
+</html>
